@@ -2,6 +2,7 @@
 <html>
 <head>
   <meta name="viewport" content="width=device-width, user-scalable=no">
+  <link href="css/bootstrap.css" rel="stylesheet">
   <style>
     #divContainer{
       height: 100%;
@@ -72,6 +73,12 @@
       top: 50%;
       transform: translateY(-50%);
     }
+    #endCall {
+      left: 50%;
+      transform: translateX(-50%);
+      top: 50%;
+      transform: translateY(-50%);
+    }
   </style>
 
 </head>
@@ -80,6 +87,12 @@
 
 <div id="divContainer">
   <div id="divCallControl">
+    <!--<span class="glyphicon glyphicon-phone-alt" id="endCall"></span>-->
+    <div class="btn-group" id="endCall">
+      <button type="button" class="btn btn-default">End Call</button>
+      <button type="button" class="btn btn-default">Switch</button>
+    </div>
+
   </div>
   <div id="divRemote">
     <img src="Peter.jpg">
