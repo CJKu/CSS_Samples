@@ -1,73 +1,73 @@
 <!DOCTYPE html>
 <html>
 <head>
-<style>
+  <meta name="viewport" content="width=device-width, user-scalable=no">
+  <style>
+    #divContainer{
+      height: 100%;
+      width: 100%;
+    }
 
-#divContainer{
-  height: 100%;
-  width: 100%;
-}
+    #divRemote
+    {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      border: 1px solid black;
+      background-color: yellow;
+      transform-origin:0% 0%;
+    }
 
-#divRemote
-{
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  border: 1px solid black;
-  background-color: yellow;
-  transform-origin:0% 0%;
-}
+    #divLocal
+    {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      border: 1px solid black;
+      background-color: red;
+      transform-origin:100% 100%;
+    }
 
-#divLocal
-{
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  border: 1px solid black;
-  background-color: red;
-  transform-origin:100% 100%;
-}
+    #divCallControl {
+      position: absolute;
+      border:10px 10px; 
+      width: 100%;
+      height: 50px;
+      background:#dddddd;
+      z-index: 2;
+      border:2px solid #a1a1a1;
+      border-radius:10px;
+      box-shadow: 4px 4px 2px #888888;
+    }
 
-#divCallControl {
-  position: absolute;
-  border:10px 10px; 
-  width: 100%;
-  height: 50px;
-  background:#dddddd;
-  z-index: 2;
-  border:2px solid #a1a1a1;
-  border-radius:10px;
-  box-shadow: 4px 4px 2px #888888;
-}
+    #divLocal.scaleDown, #divRemote.scaleDown {
+      transition: 1s ease;
+      transform: scale(0.3, 0.3);
+    }
 
-#divLocal.scaleDown, #divRemote.scaleDown {
-  transition: 1s ease;
-  transform: scale(0.3, 0.3);
-}
+    #divLocal.scaleUp, #divRemote.scaleUp {
+      transition: 1s ease;
+      transform: scale(1, 1);
+    }
 
-#divLocal.scaleUp, #divRemote.scaleUp {
-  transition: 1s ease;
-  transform: scale(1, 1);
-}
+    #divCallControl.fadeOut {
+      transition: opacity 0.5s ease;
+      opacity: 0.01;
+    }
 
-#divCallControl.fadeOut {
-  transition: opacity 0.5s ease;
-  opacity: 0.01;
-}
+    #divCallControl.fadeIn {
+      transition: opacity 0.5s ease;
+      opacity: 1;
+    }
 
-#divCallControl.fadeIn {
-  transition: opacity 0.5s ease;
-  opacity: 1;
-}
+    video {
+      position: relative;
+      width: 100%;
+      top: 50%;
+      transform: translateY(-50%);
+    }
 
-video {
-  position: relative;
-  width: 100%;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-</style>
+  </style>
 
 </head>
 
