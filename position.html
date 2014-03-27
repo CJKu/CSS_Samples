@@ -27,6 +27,7 @@
       border: 1px solid black;
       background-color: red;
       transform-origin:100% 100%;
+      transform: scale(0.3, 0.3);
     }
 
     #divCallControl {
@@ -35,6 +36,7 @@
       width: 100%;
       height: 50px;
       z-index: 2;
+      opacity: 0.01;
     }
 
     #divLocal.scaleDown, #divRemote.scaleDown {
@@ -63,34 +65,59 @@
       top: 50%;
       transform: translateY(-50%);
     }
+
     img {
-      position: relative;
+      position: absolute;
       width: 100%;
       top: 50%;
       transform: translateY(-50%);
     }
-    #btn-callControl {
+
+    #btn-Group {
       position: absolute;
       left: 50%;
       top: 50%;
       transform: translateX(-50%) translateY(-50%);
     }
-  </style>
 
+    #btn-endCall {
+      position: absolute;
+      left: 25%;
+      top: 50%;
+      transform: translateX(-50%) translateY(-50%);
+    }
+
+    #btn-mute {
+      position: absolute;
+      left: 75%;
+      top: 50%;
+      transform: translateX(-50%) translateY(-50%);
+    }
+
+    p.view-title {
+      font-size: large;
+      color: white;
+      text-shadow: 2px 2px black;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%)
+    }
+  </style>
 </head>
 
 <body>
 
 <div id="divContainer">
   <div class="panel panel-default" id="divCallControl">
-    <div class="panel-body">
-      <div class="btn-group" id="btn-callControl">
-        <button type="button" class="btn btn-default" id="btn-endCall">End Call</button>
-        <button type="button" class="btn btn-default" id="btn-switch">Switch</button>
-      </div>
-    </div>
+    <button type="button" class="btn btn-danger" id="btn-endCall">
+      <span class="glyphicon glyphicon-remove-circle"></span>End Call
+      </button>
+    <button type="button" class="btn btn-default" id="btn-mute">
+      <span class="glyphicon glyphicon-record"></span>Mute
+    </button>
   </div>
   <div id="divRemote">
+    <p class="view-title">Remote</p>
     <img src="Peter.jpg">
     <!--<video>
       <source src="movie.mp4" type="video/mp4">
@@ -98,6 +125,7 @@
     </video>-->
   </div>
   <div id="divLocal">
+    <p class="view-title">Local</p>
     <img src="Peter.jpg">
     <!--<video>
       <source src="movie.mp4" type="video/mp4">
@@ -106,18 +134,17 @@
   </div>
 </div>
   <script>
-    var localView = document.getElementById('divLocal');
-    var remoteView = document.getElementById('divRemote');
-    var controlView = document.getElementById('divCallControl');
-    var endCallButton = document.getElementById('btn-endCall');
-    var switchViewButton = document.getElementById('btn-switch');
+    var localView         = document.getElementById('divLocal');
+    var remoteView        = document.getElementById('divRemote');
+    var controlPanel      = document.getElementById('divCallControl');
+    var endCallButton     = document.getElementById('btn-endCall');
+    var muteButton        = document.getElementById('btn-mute');
+    
+    controlPanel.classList.add('fadeOut');
 
-    localView.classList.add('scaleDown');
-
-    function scaleViews() {
-      controlView.classList.remove('fadeIn');
-      controlView.classList.add('fadeOut');
-      hideControlView();
+    // Switch focus from/to local view to/from remote view.
+    function switchViews() {
+      hideControlPanel();
 
       if (localView.classList.contains('scaleDown')) {
         // Scale down remoteView and move it front
@@ -143,52 +170,58 @@
       }
     }
 
-    localView.onclick = scaleViews;
-    remoteView.onclick = scaleViews;
-    switchViewButton.onclick = scaleViews;
+    localView.onclick = switchViews;
+    remoteView.onclick = switchViews;
 
-    var fadeTimer = null;
-    function hideControlView() {
-        controlView.classList.add('fadeOut');
-        controlView.classList.remove('fadeIn');
-        switchViewButton.disabled = true;
-        endCallButton.disabled = true;
+    var controlPanelFadeoutTimer = null;
 
-        if (fadeTimer)
-        {
-          clearInterval(fadeTimer);
-          fadeTimer = null;
-        }
+    function hideControlPanel() {
+      controlPanel.classList.add('fadeOut');
+      controlPanel.classList.remove('fadeIn');
+      muteButton.disabled = true;
+      endCallButton.disabled = true;
+
+      if (controlPanelFadeoutTimer)
+      {
+        clearInterval(controlPanelFadeoutTimer);
+        controlPanelFadeoutTimer = null;
+      }
     }
 
-    
-    function opacityView() {
-      if (fadeTimer)
-      {
-        clearInterval(fadeTimer);
-        fadeTimer = null;
-      }
+    function showControlPanel() {
+      controlPanel.classList.add('fadeIn');
+      controlPanel.classList.remove('fadeOut');
+      muteButton.disabled = false;
+      endCallButton.disabled = false;
 
-      if (controlView.classList.contains('fadeIn'))
+      if (controlPanelFadeoutTimer)
       {
-        controlView.classList.add('fadeOut');
-        controlView.classList.remove('fadeIn');
-        switchViewButton.disabled = true;
-        endCallButton.disabled = true;
+        clearInterval(controlPanelFadeoutTimer);
+        controlPanelFadeoutTimer = null;
+      }
+    }
+
+    function controlPanelOpacityChange() {
+      if (controlPanel.classList.contains('fadeIn'))
+      {
+        hideControlPanel();
       }
       else 
       {
-        controlView.classList.add('fadeIn');
-        controlView.classList.remove('fadeOut');
-        switchViewButton.disabled = false;
-        endCallButton.disabled = false;
-
-        fadeTimer = setInterval(hideControlView, 5000);
+        showControlPanel();
+        controlPanelFadeoutTimer = setInterval(hideControlPanel, 5000);
       }
     }
 
-    controlView.onclick = opacityView;
+    controlPanel.onclick = controlPanelOpacityChange;
 
+    muteButton.onclick = function() {
+
+    }
+
+    endCallButton.onclick = function() {
+
+    }
   </script>
 </body>
 </html>
