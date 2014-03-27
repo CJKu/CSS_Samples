@@ -34,11 +34,7 @@
       border:10px 10px; 
       width: 100%;
       height: 50px;
-      background:#dddddd;
       z-index: 2;
-      border:2px solid #a1a1a1;
-      border-radius:10px;
-      box-shadow: 4px 4px 2px #888888;
     }
 
     #divLocal.scaleDown, #divRemote.scaleDown {
@@ -73,19 +69,11 @@
       top: 50%;
       transform: translateY(-50%);
     }
-    #btn-endCall {
+    #btn-callControl {
       position: absolute;
-      left: 25%;
-      transform: translateX(-25%);
+      left: 50%;
       top: 50%;
-      transform: translateY(-50%);
-    }
-    #btn-switch {
-      position: absolute;
-      left: 75%;
-      transform: translateX(-75%);
-      top: 50%;
-      transform: translateY(-50%);
+      transform: translateX(-50%) translateY(-50%);
     }
   </style>
 
@@ -94,10 +82,13 @@
 <body>
 
 <div id="divContainer">
-  <div id="divCallControl">
-    <!--<span class="glyphicon glyphicon-phone-alt" id="endCall"></span>-->
-    <button type="button" class="btn btn-default" id="btn-endCall">End Call</button>
-    <button type="button" class="btn btn-default" id="btn-switch">Switch</button>
+  <div class="panel panel-default" id="divCallControl">
+    <div class="panel-body">
+      <div class="btn-group" id="btn-callControl">
+        <button type="button" class="btn btn-default" id="btn-endCall">End Call</button>
+        <button type="button" class="btn btn-default" id="btn-switch">Switch</button>
+      </div>
+    </div>
   </div>
   <div id="divRemote">
     <img src="Peter.jpg">
@@ -118,12 +109,15 @@
     var localView = document.getElementById('divLocal');
     var remoteView = document.getElementById('divRemote');
     var controlView = document.getElementById('divCallControl');
-    
+    var endCallButton = document.getElementById('btn-endCall');
+    var switchViewButton = document.getElementById('btn-switch');
+
     localView.classList.add('scaleDown');
 
     function scaleViews() {
       controlView.classList.remove('fadeIn');
       controlView.classList.add('fadeOut');
+      hideControlView();
 
       if (localView.classList.contains('scaleDown')) {
         // Scale down remoteView and move it front
@@ -151,11 +145,15 @@
 
     localView.onclick = scaleViews;
     remoteView.onclick = scaleViews;
+    switchViewButton.onclick = scaleViews;
 
     var fadeTimer = null;
     function hideControlView() {
         controlView.classList.add('fadeOut');
         controlView.classList.remove('fadeIn');
+        switchViewButton.disabled = true;
+        endCallButton.disabled = true;
+
         if (fadeTimer)
         {
           clearInterval(fadeTimer);
@@ -175,11 +173,15 @@
       {
         controlView.classList.add('fadeOut');
         controlView.classList.remove('fadeIn');
+        switchViewButton.disabled = true;
+        endCallButton.disabled = true;
       }
       else 
       {
         controlView.classList.add('fadeIn');
         controlView.classList.remove('fadeOut');
+        switchViewButton.disabled = false;
+        endCallButton.disabled = false;
 
         fadeTimer = setInterval(hideControlView, 5000);
       }
