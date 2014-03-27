@@ -3,32 +3,165 @@
 <head>
 <style>
 
-#div1
-{
-	position: relative;
-	height: 200px;
-	width: 200px;
-	border: 1px solid black;
+#divContainer{
+  height: 100%;
+  width: 100%;
 }
 
-#div2
+#divRemote
 {
-	position: absolute;
-	height: 200px;
-	width: 200px;
-	border: 1px solid black;
-	background-color: red;
-	transform: scale(0.3, 0.3);
-	transform-origin:100% 100%;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  border: 1px solid black;
+  background-color: yellow;
+  transform-origin:0% 0%;
 }
+
+#divLocal
+{
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  border: 1px solid black;
+  background-color: red;
+  transform-origin:100% 100%;
+}
+
+#divCallControl {
+  position: absolute;
+  border:10px 10px; 
+  width: 100%;
+  height: 50px;
+  background:#dddddd;
+  z-index: 2;
+  border:2px solid #a1a1a1;
+  border-radius:10px;
+  box-shadow: 4px 4px 2px #888888;
+}
+
+#divLocal.scaleDown, #divRemote.scaleDown {
+  transition: 1s ease;
+  transform: scale(0.3, 0.3);
+}
+
+#divLocal.scaleUp, #divRemote.scaleUp {
+  transition: 1s ease;
+  transform: scale(1, 1);
+}
+
+#divCallControl.fadeOut {
+  transition: opacity 0.5s ease;
+  opacity: 0.01;
+}
+
+#divCallControl.fadeIn {
+  transition: opacity 0.5s ease;
+  opacity: 1;
+}
+
+video {
+  position: relative;
+  width: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
 </style>
+
 </head>
 
 <body>
 
-<div id="div1">
-  <div id="div2"></div>
+<div id="divContainer">
+  <div id="divCallControl">
+  </div>
+  <div id="divRemote">
+    <video>
+      <source src="movie.mp4" type="video/mp4">
+      <source src="movie.ogg" type="video/ogg">
+    </video>
+  </div>
+  <div id="divLocal">
+    <video>
+      <source src="movie.mp4" type="video/mp4">
+      <source src="movie.ogg" type="video/ogg">
+    </video>
+  </div>
 </div>
+  <script>
+    var localView = document.getElementById('divLocal');
+    var remoteView = document.getElementById('divRemote');
+    var controlView = document.getElementById('divCallControl');
+    
+    localView.classList.add('scaleDown');
 
+    function scaleViews() {
+      controlView.classList.remove('fadeIn');
+      controlView.classList.add('fadeOut');
+
+      if (localView.classList.contains('scaleDown')) {
+        // Scale down remoteView and move it front
+        remoteView.style.zIndex = 1;
+        remoteView.classList.remove('scaleUp');
+        remoteView.classList.add('scaleDown');
+
+        // Scale up localview and move it back
+        localView.style.zIndex = 0;
+        localView.classList.remove('scaleDown');
+        localView.classList.add('scaleUp');
+      }
+      else {
+        // Scale down localView and move it front
+        localView.style.zIndex = 1;
+        localView.classList.remove('scaleUp');
+        localView.classList.add('scaleDown');
+
+        // Scale up remoteView and move it back
+        remoteView.style.zIndex = 0;
+        remoteView.classList.remove('scaleDown');
+        remoteView.classList.add('scaleUp');
+      }
+    }
+
+    localView.onclick = scaleViews;
+    remoteView.onclick = scaleViews;
+
+    var fadeTimer = null;
+    function hideControlView() {
+        controlView.classList.add('fadeOut');
+        controlView.classList.remove('fadeIn');
+        if (fadeTimer)
+        {
+          clearInterval(fadeTimer);
+          fadeTimer = null;
+        }
+    }
+
+    
+    function opacityView() {
+      if (fadeTimer)
+      {
+        clearInterval(fadeTimer);
+        fadeTimer = null;
+      }
+
+      if (controlView.classList.contains('fadeIn'))
+      {
+        controlView.classList.add('fadeOut');
+        controlView.classList.remove('fadeIn');
+      }
+      else 
+      {
+        controlView.classList.add('fadeIn');
+        controlView.classList.remove('fadeOut');
+
+        fadeTimer = setInterval(hideControlView, 5000);
+      }
+    }
+
+    controlView.onclick = opacityView;
+
+  </script>
 </body>
 </html>
